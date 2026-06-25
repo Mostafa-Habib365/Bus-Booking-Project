@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+
+{% block title %}GoTrip Egypt - Book Bus Tickets{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero">
+    <div class="container">
+        <h1><i class="bi bi-bus-front"></i> GoTrip Egypt</h1>
+        <p>Book your bus tickets easily between cities in Egypt</p>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Search Box -->
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="search-box">
+                <h4 class="text-center mb-4"><i class="bi bi-search"></i> Search Available Trips</h4>
+                <form action="{{ url_for('search') }}" method="POST" id="homeSearchForm">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <div class="row g-3">
+                        <!-- From City -->
+                        <div class="col-md-3">
+                            <label class="form-label" for="from_city_home">From</label>
+                            <select name="from_city" id="from_city_home" class="form-select" required>
+                                <option value="">Select City</option>
+                                {% for city in cities %}
+                                <option value="{{ city.id }}">{{ city.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <!-- To City -->
+                        <div class="col-md-3">
+                            <label class="form-label" for="to_city_home">To</label>
+                            <select name="to_city" id="to_city_home" class="form-select" required>
+                                <option value="">Select City</option>
+                                {% for city in cities %}
+                                <option value="{{ city.id }}">{{ city.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <!-- Travel Date -->
+                        <div class="col-md-3">
+                            <label class="form-label" for="travel_date_home">Travel Date</label>
+                            <input type="date" name="travel_date" id="travel_date_home" class="form-control" required
+                                   min="{{ today }}" value="{{ today }}">
+                        </div>
+                        <!-- Search Button -->
+                        <div class="col-md-3 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="bi bi-search"></i> Search Trips
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info Section -->
+    <div class="row mt-5">
+        <div class="col-md-4">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <i class="bi bi-search" style="font-size: 3rem; color: #0d6efd;"></i>
+                    <h5 class="card-title mt-3">Search Trips</h5>
+                    <p class="card-text text-muted">Find bus trips between Egyptian cities quickly and easily.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <i class="bi bi-ticket-perforated" style="font-size: 3rem; color: #198754;"></i>
+                    <h5 class="card-title mt-3">Book Tickets</h5>
+                    <p class="card-text text-muted">Register and book your seats in just a few clicks.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <i class="bi bi-bus-front" style="font-size: 3rem; color: #dc3545;"></i>
+                    <h5 class="card-title mt-3">Travel Comfortably</h5>
+                    <p class="card-text text-muted">Choose from Economy, Deluxe, or VIP bus options.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popular Routes Section -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <h3 class="text-center mb-4">Popular Routes</h3>
+        </div>
+        <div class="col-md-3">
+            <div class="card trip-card">
+                <div class="card-body text-center">
+                    <h6 class="card-title">Cairo <i class="bi bi-arrow-right"></i> Alexandria</h6>
+                    <p class="text-muted mb-0">Starting from 120 EGP</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card trip-card">
+                <div class="card-body text-center">
+                    <h6 class="card-title">Cairo <i class="bi bi-arrow-right"></i> Hurghada</h6>
+                    <p class="text-muted mb-0">Starting from 250 EGP</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card trip-card">
+                <div class="card-body text-center">
+                    <h6 class="card-title">Cairo <i class="bi bi-arrow-right"></i> Luxor</h6>
+                    <p class="text-muted mb-0">Starting from 300 EGP</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card trip-card">
+                <div class="card-body text-center">
+                    <h6 class="card-title">Hurghada <i class="bi bi-arrow-right"></i> Sharm</h6>
+                    <p class="text-muted mb-0">Starting from 180 EGP</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- How to Book Section -->
+    <div class="row mt-5 mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title text-center mb-4">How to Book</h4>
+                    <div class="row text-center">
+                        <div class="col-md-4">
+                            <h5><span class="badge bg-primary">1</span></h5>
+                            <p>Register or login to your account</p>
+                        </div>
+                        <div class="col-md-4">
+                            <h5><span class="badge bg-primary">2</span></h5>
+                            <p>Search and select your trip</p>
+                        </div>
+                        <div class="col-md-4">
+                            <h5><span class="badge bg-primary">3</span></h5>
+                            <p>Choose seats and confirm booking</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

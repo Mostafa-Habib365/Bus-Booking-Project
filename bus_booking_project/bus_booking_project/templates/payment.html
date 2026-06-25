@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block title %}Payment - GoTrip Egypt{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Trip Summary Card -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-bus-front"></i> Trip Summary</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Route:</strong> {{ trip.from_city | escape }} <i class="bi bi-arrow-right"></i> {{ trip.to_city | escape }}</p>
+                            <p><strong>Date:</strong> {{ trip.travel_date }}</p>
+                            <p><strong>Time:</strong> {{ trip.departure_time }} - {{ trip.arrival_time }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Bus:</strong> {{ trip.bus_name | escape }} <span class="badge bg-secondary">{{ trip.bus_type | escape }}</span></p>
+                            <p><strong>Seats:</strong> {{ seats_count }}</p>
+                            <p><strong>Total Amount:</strong> <span class="text-success fs-5">{{ "%.0f"|format(total_price) }} EGP</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Form -->
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0"><i class="bi bi-credit-card"></i> Payment - {{ payment_method.name | escape }}</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">{{ payment_method.description | escape }}</p>
+
+                    <form method="POST" id="paymentForm">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <!-- Cash Payment - No additional details needed -->
+                        {% if payment_method.id == 1 %}
+                            <div class="alert alert-info">
+                                <i class="bi bi-info-circle"></i>
+                                <strong>Cash Payment:</strong> You will pay {{ "%.0f"|format(total_price) }} EGP in cash when you arrive at the station.
+                            </div>
+
+                        <!-- credit Card or Visa Payment -->
+                        {% elif payment_method.id in [2, 4] %}
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <label class="form-label" for="card_number">Card Number</label>
+                                    <input type="text" name="card_number" id="card_number" class="form-control"
+                                           placeholder="1234 5678 9012 3456" maxlength="19" required>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <label class="form-label" for="card_holder">Card Holder Name</label>
+                                    <input type="text" name="card_holder" id="card_holder" class="form-control"
+                                           placeholder="JOHN DOE" required>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label" for="expiry_date">Expiry Date</label>
+                                    <input type="text" name="expiry_date" id="expiry_date" class="form-control"
+                                           placeholder="MM/YY" maxlength="5" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" for="cvv">CVV</label>
+                                    <input type="text" name="cvv" id="cvv" class="form-control"
+                                           placeholder="123" maxlength="4" required>
+                                </div>
+                            </div>
+
+                        <!-- Fawry Payment -->
+                        {% elif payment_method.id == 3 %}
+                            <div class="alert alert-info">
+                                <i class="bi bi-info-circle"></i>
+                                <strong>Fawry Payment:</strong> Visit any Fawry kiosk or use the Fawry app to pay.
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="fawry_reference">Fawry Reference Number</label>
+                                <input type="text" name="fawry_reference" id="fawry_reference" class="form-control"
+                                       placeholder="Enter your Fawry payment reference" maxlength="20" required>
+                                <div class="form-text">
+                                    You can find this reference at any Fawry kiosk after making the payment.
+                                </div>
+                            </div>
+
+                        <!-- Wallet Payment -->
+                        {% elif payment_method.id == 5 %}
+                            <div class="mb-3">
+                                <label class="form-label" for="wallet_number">Wallet Number</label>
+                                <input type="text" name="wallet_number" id="wallet_number" class="form-control"
+                                       placeholder="01xxxxxxxxx" maxlength="11" required>
+                                <div class="form-text">
+                                    Enter your mobile wallet number (e.g., 01012345678)
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="{{ url_for('payment_cancel') }}" class="btn btn-secondary">
+                                <i class="bi bi-x-circle"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="bi bi-check-circle"></i> Pay {{ "%.0f"|format(total_price) }} EGP
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

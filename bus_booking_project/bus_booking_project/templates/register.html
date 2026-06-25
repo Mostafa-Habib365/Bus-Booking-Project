@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}Register - GoTrip Egypt{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h4><i class="bi bi-person-plus"></i> Register</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" id="registerForm">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <!-- Full Name -->
+                        <div class="mb-3">
+                            <label class="form-label" for="full_name">Full Name</label>
+                            <input type="text" name="full_name" id="full_name" class="form-control" required
+                                   placeholder="Enter your full name">
+                        </div>
+                        <!-- Email -->
+                        <div class="mb-3">
+                            <label class="form-label" for="email">Email Address</label>
+                            <input type="email" name="email" id="email" class="form-control" required
+                                   placeholder="Enter your email">
+                        </div>
+                        <!-- Phone -->
+                        <div class="mb-3">
+                            <label class="form-label" for="phone">Phone Number</label>
+                            <input type="text" name="phone" id="phone" class="form-control"
+                                   placeholder="Enter your phone number (optional)">
+                        </div>
+                        <!-- Password -->
+                        <div class="mb-3">
+                            <label class="form-label" for="password">Password</label>
+                            <input type="password" name="password" id="password" class="form-control" required
+                                   placeholder="Create a password">
+                        </div>
+                        <!-- Register Button -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-person-plus"></i> Register
+                            </button>
+                        </div>
+                    </form>
+                    <hr>
+                    <div class="text-center">
+                        <p class="mb-0">Already have an account? 
+                            <a href="{{ url_for('login') }}">Login here</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

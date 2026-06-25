@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage Cities - Admin{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <h3><i class="bi bi-building"></i> Manage Cities</h3>
+        </div>
+        <div class="col-md-6 text-end">
+            <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary btn-sm">
+                <i class="bi bi-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <!-- Add City Form -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-plus-circle"></i> Add New City</h5>
+        </div>
+        <div class="card-body">
+            <form method="POST" id="addCityForm">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="action" value="add">
+                <div class="row g-3">
+                    <div class="col-md-8">
+                        <label class="form-label" for="city_name">City name</label>
+                        <input type="text" name="name" id="city_name" class="form-control" placeholder="City name" required maxlength="100">
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-plus-lg"></i> Add City
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Cities Table -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">All Cities</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>City Name</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for city in cities %}
+                        <tr>
+                            <td>{{ city.id }}</td>
+                            <td>{{ city.name | escape }}</td>
+                            <td>
+                                <!-- Edit Button triggers modal -->
+                                <button class="btn btn-sm btn-warning" data-bs-toggle="modal"
+                                        data-bs-target="#editModal{{ city.id }}">
+                                    <i class="bi bi-pencil"></i> Edit
+                                </button>
+                                <!-- Delete Form -->
+                                <form method="POST" class="d-inline"
+                                      onsubmit="return confirm('Delete this city?')">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="city_id" value="{{ city.id }}">
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        <i class="bi bi-trash"></i> Delete
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modals -->
+{% for city in cities %}
+<div class="modal fade" id="editModal{{ city.id }}" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="POST" id="editCityForm{{ city.id }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="action" value="edit">
+                <input type="hidden" name="city_id" value="{{ city.id }}">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit City</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <label class="form-label" for="edit_city_name{{ city.id }}">City Name</label>
+                    <input type="text" name="name" id="edit_city_name{{ city.id }}" class="form-control" value="{{ city.name | escape }}" required maxlength="100">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

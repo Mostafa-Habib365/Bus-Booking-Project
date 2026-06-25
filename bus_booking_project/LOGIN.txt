@@ -1,0 +1,11 @@
+| Role     | Email                  | Password    |
+| -------- | ---------------------- | ----------- |
+| Admin    | <admin@example.com>    | admin123    |
+| Customer | <customer@example.com> | customer123 |
+| Customer | <sara@example.com>     | password456 |
+
+
+
+cd bus_booking_project
+pip install -r requirements.txt
+python app.py

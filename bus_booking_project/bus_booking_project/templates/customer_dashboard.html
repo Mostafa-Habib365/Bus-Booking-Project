@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block title %}Customer Dashboard - GoTrip Egypt{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Welcome Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h3><i class="bi bi-person-circle"></i> Welcome, {{ session.get('user_name', 'Customer') | escape }}!</h3>
+            <p class="text-muted">Search for trips and book your tickets here.</p>
+        </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card stats-card success h-100">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5>My Bookings</h5>
+                        <p class="mb-0 text-muted">View and manage your bookings</p>
+                    </div>
+                    <a href="{{ url_for('my_bookings') }}" class="btn btn-success">
+                        <i class="bi bi-ticket-perforated"></i> View
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card stats-card h-100">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5>Search Trips</h5>
+                        <p class="mb-0 text-muted">Find available bus trips</p>
+                    </div>
+                    <a href="#searchSection" class="btn btn-primary">
+                        <i class="bi bi-search"></i> Search
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Section -->
+    <div class="card" id="searchSection">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-search"></i> Search for Trips</h5>
+        </div>
+        <div class="card-body">
+            <form action="{{ url_for('customer_search') }}" method="POST" id="customerSearchForm">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label" for="from_city_customer">From City</label>
+                        <select name="from_city" id="from_city_customer" class="form-select" required>
+                            <option value="">Select City</option>
+                            {% for city in cities %}
+                            <option value="{{ city.id }}">{{ city.name | escape }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label" for="to_city_customer">To City</label>
+                        <select name="to_city" id="to_city_customer" class="form-select" required>
+                            <option value="">Select City</option>
+                            {% for city in cities %}
+                            <option value="{{ city.id }}">{{ city.name | escape }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label" for="travel_date_customer">Travel Date</label>
+                        <input type="date" name="travel_date" id="travel_date_customer" class="form-control" required
+                               min="{{ today }}" value="{{ today }}">
+                    </div>
+                    <div class="col-md-3 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-search"></i> Search Trips
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

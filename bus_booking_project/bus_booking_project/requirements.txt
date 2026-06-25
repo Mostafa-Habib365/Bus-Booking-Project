@@ -1,0 +1,9 @@
+# Bus Ticket Booking System
+# Security-hardened requirements
+
+Flask==3.0.0
+Werkzeug==3.0.1
+Flask-WTF==1.2.1
+email-validator==2.1.0
+MarkupSafe==2.1.3
+pytest==7.4.0

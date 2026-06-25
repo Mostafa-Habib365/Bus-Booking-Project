@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard - GoTrip Egypt{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h3><i class="bi bi-speedometer2"></i> Admin Dashboard</h3>
+            <p class="text-muted">Overview of the bus booking system</p>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card stats-card">
+                <div class="card-body">
+                    <h6 class="text-muted mb-1">Total Trips</h6>
+                    <div class="stats-number">{{ total_trips }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stats-card warning">
+                <div class="card-body">
+                    <h6 class="text-muted mb-1">Total Bookings</h6>
+                    <div class="stats-number">{{ total_bookings }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stats-card success">
+                <div class="card-body">
+                    <h6 class="text-muted mb-1">Total Customers</h6>
+                    <div class="stats-number">{{ total_customers }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stats-card danger">
+                <div class="card-body">
+                    <h6 class="text-muted mb-1">Total Revenue</h6>
+                    <div class="stats-number">{{ "%.0f"|format(revenue) }} EGP</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Management Links -->
+    <div class="row">
+        <div class="col-12">
+            <h4 class="mb-3">Management</h4>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-building" style="font-size: 2.5rem; color: #0d6efd;"></i>
+                    <h5 class="card-title mt-2">Cities</h5>
+                    <p class="card-text text-muted">Add, edit, or remove cities</p>
+                    <a href="{{ url_for('manage_cities') }}" class="btn btn-primary btn-sm">Manage Cities</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-bus-front" style="font-size: 2.5rem; color: #198754;"></i>
+                    <h5 class="card-title mt-2">Buses</h5>
+                    <p class="card-text text-muted">Add, edit, or remove buses</p>
+                    <a href="{{ url_for('manage_buses') }}" class="btn btn-success btn-sm">Manage Buses</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-calendar-check" style="font-size: 2.5rem; color: #6f42c1;"></i>
+                    <h5 class="card-title mt-2">Trips</h5>
+                    <p class="card-text text-muted">Add, edit, or remove trips</p>
+                    <a href="{{ url_for('manage_trips') }}" class="btn btn-primary btn-sm" style="background-color: #6f42c1; border-color: #6f42c1;">Manage Trips</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-ticket-perforated" style="font-size: 2.5rem; color: #dc3545;"></i>
+                    <h5 class="card-title mt-2">Bookings</h5>
+                    <p class="card-text text-muted">View all customer bookings</p>
+                    <a href="{{ url_for('all_bookings') }}" class="btn btn-danger btn-sm">View Bookings</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-people" style="font-size: 2.5rem; color: #fd7e14;"></i>
+                    <h5 class="card-title mt-2">Customers</h5>
+                    <p class="card-text text-muted">View registered customers</p>
+                    <a href="{{ url_for('customers') }}" class="btn btn-warning btn-sm">View Customers</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

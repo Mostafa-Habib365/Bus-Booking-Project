@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}My Bookings - GoTrip Egypt{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3 class="mb-4"><i class="bi bi-ticket-perforated"></i> My Bookings</h3>
+
+    {% if bookings %}
+    <div class="row">
+        {% for booking in bookings %}
+        <div class="col-md-6 mb-3">
+            <div class="card trip-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span><strong>Booking #{{ booking.id }}</strong></span>
+                    {% if booking.status == 'Confirmed' %}
+                    <span class="badge-confirmed">Confirmed</span>
+                    {% else %}
+                    <span class="badge-cancelled">Cancelled</span>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">
+                        {{ booking.from_city | escape }} <i class="bi bi-arrow-right"></i> {{ booking.to_city | escape }}
+                    </h5>
+                    <p class="mb-1">
+                        <i class="bi bi-calendar"></i> {{ booking.travel_date }}
+                        <span class="ms-2"><i class="bi bi-clock"></i> {{ booking.departure_time }} - {{ booking.arrival_time }}</span>
+                    </p>
+                    <p class="mb-1">
+                        <i class="bi bi-bus-front"></i> {{ booking.bus_name | escape }}
+                        <span class="badge bg-secondary">{{ booking.bus_type | escape }}</span>
+                    </p>
+                    <p class="mb-1">
+                        <i class="bi bi-people"></i> {{ booking.seats_count }} seat(s)
+                    </p>
+                    <p class="mb-1">
+                        <i class="bi bi-cash"></i> <strong>Total: {{ "%.0f"|format(booking.total_price) }} EGP</strong>
+                    </p>
+                    {% if booking.payment_method %}
+                    <p class="mb-1">
+                        <i class="bi bi-credit-card"></i> Payment: {{ booking.payment_method | escape }}
+                    </p>
+                    {% endif %}
+                    <p class="text-muted small mb-0">
+                        Booked on: {{ booking.booking_date }}
+                    </p>
+                </div>
+                {% if booking.status == 'Confirmed' %}
+                <div class="card-footer text-end">
+                    <form method="POST" action="{{ url_for('cancel_booking', booking_id=booking.id) }}" class="d-inline"
+                          onsubmit="return confirm('Are you sure you want to cancel this booking?')">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn btn-danger btn-sm">
+                            <i class="bi bi-x-circle"></i> Cancel Booking
+                        </button>
+                    </form>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info text-center">
+        <i class="bi bi-info-circle" style="font-size: 2rem;"></i>
+        <h5 class="mt-2">No bookings yet</h5>
+        <p>Search for trips and book your first ticket!</p>
+        <a href="{{ url_for('customer_dashboard') }}" class="btn btn-primary">
+            <i class="bi bi-search"></i> Search Trips
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
