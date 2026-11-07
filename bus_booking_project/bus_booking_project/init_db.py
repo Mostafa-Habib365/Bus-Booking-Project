@@ -7,13 +7,15 @@ import sqlite3
 from werkzeug.security import generate_password_hash
 import os
 
+DB_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'database.db')
+
 # Remove old database if exists to start fresh
-if os.path.exists('database.db'):
-    os.remove('database.db')
+if os.path.exists(DB_PATH):
+    os.remove(DB_PATH)
     print("Old database removed.")
 
 # Connect to SQLite database (creates file if not exists)
-conn = sqlite3.connect('database.db')
+conn = sqlite3.connect(DB_PATH)
 cursor = conn.cursor()
 
 # ============================

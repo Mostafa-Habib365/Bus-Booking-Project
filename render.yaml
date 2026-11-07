@@ -1,0 +1,18 @@
+# One-click deploy on Render (free plan): https://render.com/deploy
+# The SQLite demo database is rebuilt with fresh sample trips every time the service starts.
+services:
+  - type: web
+    name: bus-booking-demo
+    runtime: python
+    plan: free
+    rootDir: bus_booking_project/bus_booking_project
+    buildCommand: pip install -r requirements.txt
+    startCommand: python init_db.py && gunicorn app:app --workers 1 --threads 4 --bind 0.0.0.0:$PORT
+    healthCheckPath: /
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: SECRET_KEY
+        generateValue: true
+      - key: SESSION_COOKIE_SECURE
+        value: "true"

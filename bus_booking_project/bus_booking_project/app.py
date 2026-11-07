@@ -11,6 +11,10 @@ from markupsafe import escape as markup_escape
 
 app = Flask(__name__)
 
+# Behind a hosting proxy (Render etc.): trust X-Forwarded-* so HTTPS and client IPs are correct
+from werkzeug.middleware.proxy_fix import ProxyFix
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
+
 try:
     from flask_wtf import FlaskForm
     from wtforms import StringField, PasswordField, IntegerField, DecimalField, SelectField, DateField, TimeField
@@ -24,14 +28,14 @@ except ImportError:
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or os.urandom(32)
 app.config['SESSION_COOKIE_HTTPONLY'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
-app.config['SESSION_COOKIE_SECURE'] = False
+app.config['SESSION_COOKIE_SECURE'] = os.environ.get('SESSION_COOKIE_SECURE', 'false').lower() == 'true'
 app.config['WTF_CSRF_ENABLED'] = WTF_CSRF_ENABLED
 
 MAX_LOGIN_ATTEMPTS = 5
 LOGIN_ATTEMPTS = {}
 
 def get_db():
-    conn = sqlite3.connect('database.db')
+    conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     return conn
 
